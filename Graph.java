@@ -20,7 +20,8 @@ public class Graph {
     private Results results;
     private Vertex source;
     // adjacency list
-    private ArrayList<Vertex>[] adjList;
+    private ArrayList<Vertex>[] adjListForward;
+    private ArrayList<Vertex>[] adjListBackward;
     private boolean DEBUG;
 
     //Constructor
@@ -37,18 +38,20 @@ public class Graph {
     // adjacency list
     @SuppressWarnings("unchecked")
     private void initAdjList() {
-        adjList = new ArrayList[numberOfVertices];
+        adjListForward = new ArrayList[numberOfVertices];
+        adjListBackward = new ArrayList[numberOfVertices];
 
         for (int i = 0; i < numberOfVertices; i++) {
-            adjList[i] = new ArrayList<>();
+            adjListForward[i] = new ArrayList<>();
+            adjListBackward[i] = new ArrayList<>();
         }
     }
 
     // add edge from u to v
     public void addEdge(Vertex u, Vertex v) {
         // Add v to u's list.
-        adjList[u.id].add(v);
-        adjList[v.id].add(u);
+        adjListForward[u.id].add(v);
+        adjListBackward[v.id].add(u);
     }
 
     public void findAllVertexPaths(Vertex s, Vertex d, String flag, Results results) {
@@ -85,7 +88,6 @@ public class Graph {
         if (u.equals(d)) {
             List<Vertex> finalPathFound = new ArrayList<Vertex>();
             Vertex previous = null;
-            if(isValidPathLeftToRightFlow(localPathList)) {
                 for (Vertex i : localPathList) {
                     if (previous == null) {
                         previous = i;
@@ -102,9 +104,9 @@ public class Graph {
                     finalPathFound.add(i);
                 }
                 results.addPath(finalPathFound);
-            }
+
         }
-        for (Vertex i : adjList[u.id]) {
+        for (Vertex i : adjListForward[u.id]) {
 
             if (!isVisited[i.id]) {
                 // store current node
@@ -128,7 +130,7 @@ public class Graph {
         // Mark the current node
         isVisited[u.id] = true;
 
-        if (u.equals(d) && isValidPathRightToLeftFlow(localPathList)) {
+        if (u.equals(d)) {
 
             List<Vertex> finalPathFound = new ArrayList<Vertex>();
             Vertex previous = null;
@@ -155,7 +157,7 @@ public class Graph {
         }
 
 
-        for (Vertex i : adjList[u.id]) {
+        for (Vertex i : adjListBackward[u.id]) {
             if (!isVisited[i.id]) {
                 // store current node
                 // in path[]
@@ -173,7 +175,7 @@ public class Graph {
     }
 
     /*Make sure we go in the right direction with help of flow value*/
-    boolean isValidPathLeftToRightFlow(List<Vertex> path){
+  /*  boolean isValidPathLeftToRightFlow(List<Vertex> path){
         Vertex previous = null;
         for (Vertex i : path) {
             if(previous == null){
@@ -206,7 +208,7 @@ public class Graph {
             }
         }
         return true;
-    }
+    }*/
     // Driver program
     public static void main(String[] args) {
         // Create a sample graph
@@ -214,14 +216,14 @@ public class Graph {
         boolean DEBUG = false;
         Graph graph = new Graph(8,DEBUG);
 
-        Vertex a = new Vertex(0, "A", 10,0);
-        Vertex b = new Vertex(1, "B", 20,10);
-        Vertex c = new Vertex(2, "C", 5,20);
-        Vertex d = new Vertex(3, "D", 10,30);
-        Vertex e = new Vertex(4, "E", 20,40);
-        Vertex f = new Vertex(5, "F", 15,15);
-        Vertex g = new Vertex(6, "G", 5,25);
-        Vertex h = new Vertex(7, "H", 15,12);
+        Vertex a = new Vertex(0, "A", 10);
+        Vertex b = new Vertex(1, "B", 20);
+        Vertex c = new Vertex(2, "C", 5);
+        Vertex d = new Vertex(3, "D", 10);
+        Vertex e = new Vertex(4, "E", 20);
+        Vertex f = new Vertex(5, "F", 15);
+        Vertex g = new Vertex(6, "G", 5);
+        Vertex h = new Vertex(7, "H", 15);
         graph.addEdge(a, b);
         graph.addEdge(b, c);
         graph.addEdge(c, d);

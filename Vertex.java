@@ -8,13 +8,12 @@ public class Vertex {
     public Integer earliestFinish;
     public Integer latestStart;
     public Integer latestFinish;
-    public Integer flow;
     public Integer floatTime;
 
-    public Vertex(int id, String name, int duration, int flow){
+    public Vertex(int id, String name, int duration){
         this.id = id;
         this.name = name;
         this.duration = duration;
-        this.flow = flow;
+
     }
 }
